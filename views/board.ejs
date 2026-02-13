@@ -1,0 +1,20 @@
+<div class="chessboard">
+    <% const pieces={ 'w-k' : '♔' , 'w-q' : '♕' , 'w-r' : '♖' , 'w-b' : '♗' , 'w-n' : '♘' , 'w-p' : '♙' , 'b-k' : '♚'
+        , 'b-q' : '♛' , 'b-r' : '♜' , 'b-b' : '♝' , 'b-n' : '♞' , 'b-p' : '♟' }; %>
+        <% board.forEach((row, rowIndex)=> { %>
+            <div class="board-row">
+                <% row.forEach((square, colIndex)=> { %>
+                    <% const isLight=(rowIndex + colIndex) % 2===0; const file=['a', 'b' , 'c' , 'd' , 'e' , 'f' , 'g'
+                        , 'h' ][colIndex]; const rank=8 - rowIndex; const squareId=`${file}${rank}`; let pieceChar='' ;
+                        let pieceClass='' ; if (square) { const color=square.color; const type=square.type;
+                        pieceClass=`${color}-${type}`; pieceChar=pieces[pieceClass] || '' ; } %>
+                        <div class="square <%= isLight ? 'light' : 'dark' %>" data-id="<%= squareId %>"
+                            onclick="handleSquareClick('<%= squareId %>', '<%= pieceClass %>')">
+                            <span class="piece piece-<%= pieceClass %>">
+                                <%= pieceChar %>
+                            </span>
+                        </div>
+                        <% }); %>
+            </div>
+            <% }); %>
+</div>

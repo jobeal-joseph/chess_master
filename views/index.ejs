@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess Master - Play</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- Using FontAwesome for icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="game-wrapper">
+        <nav class="top-nav">
+            <a href="/" class="nav-link home-link">←</a>
+            <h1 class="game-title">Chess Master</h1>
+            <div class="nav-actions">
+                <button id="restart-btn" class="btn btn-secondary" onclick="restartGame()">New Game</button>
+            </div>
+        </nav>
+
+        <main class="game-container">
+            <div class="board-panel">
+                <div id="game-status" class="status-badge">
+                    <%= message || 'Your Turn' %>
+                </div>
+                <div id="board-container" class="board-shadow">
+                    <%- include('board', { board: board }) %>
+                </div>
+            </div>
+
+            <aside class="sidebar">
+                <div class="history-panel">
+                    <h3>Move History</h3>
+                    <div class="history-scroll">
+                        <table id="history-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>White</th>
+                                    <th>Black</th>
+                                </tr>
+                            </thead>
+                            <tbody id="history-body">
+                                <% const moves=history || []; for(let i=0; i < moves.length; i +=2) { %>
+                                    <tr>
+                                        <td>
+                                            <%= (i/2) + 1 %>.
+                                        </td>
+                                        <td>
+                                            <%= moves[i].replace('-', ' \u2192 ' ) %>
+                                        </td>
+                                        <td>
+                                            <% if (moves[i+1]) { %>
+                                                <%= moves[i+1].replace('-', ' \u2192 ' ) %>
+                                                    <% } %>
+                                        </td>
+                                    </tr>
+                                    <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </aside>
+        </main>
+    </div>
+
+    <!-- Game Over Modal -->
+    <div id="game-over-modal" class="modal-overlay <%= gameOver ? 'active' : '' %>">
+        <div class="modal-content">
+            <h2 id="modal-title">
+                <% if (message && message.includes('Win')) { %>
+                    Victory!
+                    <% } else if (message && (message.includes('Lost') || message.includes('AI Wins'))) { %>
+                        Defeat
+                        <% } else { %>
+                            Game Over
+                            <% } %>
+            </h2>
+            <p id="modal-message">
+                <%= message %>
+            </p>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="restartGame()">Play Again</button>
+                <a href="/" class="btn btn-secondary">Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/client.js"></script>
+</body>
+
+</html>
