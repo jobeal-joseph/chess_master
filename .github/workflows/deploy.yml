@@ -20,11 +20,18 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: 22
           script: |
-            # Navigate to the project directory (Update this path!)
-            cd ~/chess-app 
+            # Define project path
+            PROJECT_PATH=~/chess-app
 
-            # Pull the latest changes
-            git pull origin main
+            # Check if directory exists
+            if [ -d "$PROJECT_PATH" ]; then
+              cd "$PROJECT_PATH"
+              git pull origin main
+            else
+              # Clone the repo if it doesn't exist
+              git clone https://github.com/${{ github.repository }} $PROJECT_PATH
+              cd "$PROJECT_PATH"
+            fi
 
             # Build and deploy using Docker Compose
             # Ensure you have Docker and Docker Compose installed on the server
